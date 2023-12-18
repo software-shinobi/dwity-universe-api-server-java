@@ -1,4 +1,4 @@
-package online.textformatdashboard.api;
+package digital.softwareshinobi.dwityuniverse;
 
 import java.io.BufferedReader;
 import java.io.IOException;
