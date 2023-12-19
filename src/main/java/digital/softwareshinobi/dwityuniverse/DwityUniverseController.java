@@ -50,22 +50,20 @@ public class DwityUniverseController {
 
         List<VEvent> onlyActiveEvents = new ArrayList();
 
-        Date rightNowDate = new Date();
+        Date rightNow = new Date();
 
-        System.out.println("rightNowDate / " + rightNowDate);
-
+        // System.out.println("rightNowDate / " + rightNowDate);
         for (final VEvent singleEvent : allEvents) {
 
-            boolean startDateHasPassed = singleEvent.getDateStart().getValue().before(rightNowDate);
+            boolean startDateHasPassed = singleEvent.getDateStart().getValue().before(rightNow);
 
-            boolean endDateHasNotPassed = singleEvent.getDateEnd().getValue().after(rightNowDate);
+            boolean endDateHasNotPassed = singleEvent.getDateEnd().getValue().after(rightNow);
 
             boolean isActive = startDateHasPassed && endDateHasNotPassed;
 
             if (isActive) {
 
-                System.out.println("found active / " + singleEvent);
-
+                // System.out.println("found active / " + singleEvent);
                 onlyActiveEvents.add(singleEvent);
 
             }

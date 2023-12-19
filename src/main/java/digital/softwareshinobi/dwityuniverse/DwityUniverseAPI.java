@@ -12,7 +12,7 @@ public class DwityUniverseAPI {
         System.out.println("begin > DwityUniverseAPI");
 
         SpringApplication.run(DwityUniverseAPI.class, commandLineArguments);
-        
+
     }
 
 }
