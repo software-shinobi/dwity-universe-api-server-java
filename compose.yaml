@@ -1,23 +1,21 @@
-version: '3'
-
-networks:
-
-  text-format-dashboard-online:
-    external: false
+version: '3.8'
 
 services:
 
-  text-format-dashboard-online-api:
+    dwity-universe-api:
 
-    container_name: text-format-dashboard-online-api
+        container_name: dwity-universe-api
+        
+        image: dwity-universe-api
 
-    image: textformatdashboard.online/text-format-dashboard-api-java:latest
+        build: 
 
-    restart: unless-stopped
+            context: .
 
-    networks:
-      - text-format-dashboard-online
+            dockerfile: Dockerfile
 
-    ports:
+        restart: unless-stopped
 
-      - "44444:8080"
+        ports:
+
+            - "8888:8888"
