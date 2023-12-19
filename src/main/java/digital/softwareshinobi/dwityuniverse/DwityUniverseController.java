@@ -1,14 +1,15 @@
 package digital.softwareshinobi.dwityuniverse;
 
+import digital.softwareshinobi.dwityuniverse.thirdparty.Wget;
 import biweekly.Biweekly;
 import biweekly.ICalendar;
 import biweekly.component.VEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -20,104 +21,79 @@ public class DwityUniverseController {
 
         System.out.println();
         System.out.println("## ");
-        System.out.println("## init / Dwity Universe API");
+        System.out.println("## init > Dwity Universe API");
         System.out.println("## ");
         System.out.println();
 
     }
 
-    @GetMapping("/")
-    public String activeactive() {
-        return "/////////////////////";
+    @GetMapping("/health")
+    public String staticHealthCheck() {
+
+        return "Dwity Universe API System Is Online";
+
     }
 
-    @GetMapping("/health-check")
-    public String returnHealthCheckContentJSON() {
-        return "textformatdashboard.online API Is Up!";
+    @GetMapping("/")
+    public List<VEvent> listAllEvents() throws IOException {
+
+        List<VEvent> allEvents = this.fetchvEventRemoteICS();
+
+        return allEvents;
+
     }
 
     @GetMapping("/active")
-    public String actdddiveactive() throws IOException {
+    public List<VEvent> listActiveEvents() throws IOException {
 
+        List<VEvent> allEvents = this.fetchvEventRemoteICS();
 
-        System.out.println("enter > /active");
+        List<VEvent> activeEvents = new ArrayList();
 
-        //   File localDirectoryOfCalendarExport = new File("/tmp/");
-        String randomFileName = "dwity-online-calendar-export." + UUID.randomUUID().toString() + ".ics";
+        for (final VEvent vEvent : allEvents) {
 
-        System.out.println("location of calendar file: " + randomFileName);
-        // System.exit(1);
+            boolean startDateHasPassed = vEvent.getDateStart().getValue().before(new Date());
 
-        System.out.println("Here...");
+            boolean endDateHasNotPassed = vEvent.getDateEnd().getValue().after(new Date());
 
-        Wget.wGet(randomFileName, "https://gist.githubusercontent.com/DeMarko/6142417/raw/1cd301a5917141524b712f92c2e955e86a1add19/sample.ics");
-        System.out.println("Here...");
+            boolean isActive = startDateHasPassed && endDateHasNotPassed;
 
-        File f = new File(randomFileName);
+            if (isActive) {
 
-        ICalendar icals = Biweekly.parse(f).first();
+                activeEvents.add(vEvent);
 
-        System.out.println("Here...");
+            }
 
-        List<VEvent> listOfActiveEvents = new ArrayList();
+        }
+
+        return activeEvents;
+
+    }
+
+    public List<VEvent> fetchvEventRemoteICS() throws IOException {
+
+             String randomFileName =
+                "dwity-online-calendar-export." + UUID.randomUUID().toString() + ".ics";
+
+        File temporaryICSFile = new File(randomFileName);
+
+        //https://calendar.google.com/calendar/ical/f21b14c75f2698d2fd73960a3c7bf846ee65dddc8042a793eae1d09b42de9c66%40group.calendar.google.com/public/basic.ics
+        String url = "https://calendar.google.com/calendar/ical/f21b14c75f2698d2fd73960a3c7bf846ee65dddc8042a793eae1d09b42de9c66%40group.calendar.google.com/public/basic.ics";
+//   Wget.wGet(randomFileName, "https://gist.githubusercontent.com/DeMarko/6142417/raw/1cd301a5917141524b712f92c2e955e86a1add19/sample.ics");
+
+//String url = "https://calendar.google.com/calendar/ical/ht3jlfaac5lfd6263ulfh4tql8%40group.calendar.google.com/public/basic.ics";
+        Wget.wGet(randomFileName, url);
+
+        
+
+        ICalendar icals = Biweekly.parse(temporaryICSFile).first();
 
         List<VEvent> eventList = icals.getEvents();
 
-        //  listOfActiveEvents.addAll(getInProgress(eventList));
-        f.delete();
+        temporaryICSFile.delete();
 
-        for (int x = 0; x < 45; x++) {
-            System.out.println("");
-        }
+        return eventList;
 
-        System.out.println("last event????: ");
-
-        VEvent theLastEvent = eventList.get(eventList.size() - 1);
-        System.out.println(theLastEvent);
-
-        return theLastEvent.getSummary().getValue();
     }
-
-    @GetMapping("/latest-known-event")
-    public String prepareTextContentForRewriting() throws IOException {
-
-        System.out.println("hello-universe");
-
-        //   File localDirectoryOfCalendarExport = new File("/tmp/");
-        String randomFileName = "dwity-online-calendar-export." + UUID.randomUUID().toString() + ".ics";
-
-        System.out.println("location of calendar file: " + randomFileName);
-        // System.exit(1);
-
-        System.out.println("Here...");
-
-        Wget.wGet(randomFileName, "https://gist.githubusercontent.com/DeMarko/6142417/raw/1cd301a5917141524b712f92c2e955e86a1add19/sample.ics");
-        System.out.println("Here...");
-
-        File f = new File(randomFileName);
-
-        ICalendar icals = Biweekly.parse(f).first();
-
-        System.out.println("Here...");
-
-        List<VEvent> listOfActiveEvents = new ArrayList();
-
-        List<VEvent> eventList = icals.getEvents();
-
-        //  listOfActiveEvents.addAll(getInProgress(eventList));
-        f.delete();
-
-        for (int x = 0; x < 45; x++) {
-            System.out.println("");
-        }
-
-        System.out.println("last event????: ");
-
-        VEvent theLastEvent = eventList.get(eventList.size() - 1);
-        System.out.println(theLastEvent);
-
-        return theLastEvent.getSummary().getValue();
-    }
-
 
 }

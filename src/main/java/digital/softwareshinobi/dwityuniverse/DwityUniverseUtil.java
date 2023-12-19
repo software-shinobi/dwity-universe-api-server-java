@@ -5,9 +5,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import org.slf4j.LoggerFactory;
 
-public class CommandLineUtil {
+public class DwityUniverseUtil {
 
-    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(CommandLineUtil.class);
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(DwityUniverseUtil.class);
 
     public int executeUnixCommand(final String unixCommand) throws IOException, InterruptedException {
 

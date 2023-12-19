@@ -1,4 +1,4 @@
-package digital.softwareshinobi.dwityuniverse;
+package digital.softwareshinobi.dwityuniverse.thirdparty;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

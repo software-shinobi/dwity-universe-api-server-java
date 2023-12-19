@@ -1,20 +1,18 @@
 package digital.softwareshinobi.dwityuniverse;
 
 import java.io.IOException;
-
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class TextFormatDashboardRunner {
+public class DwityUniverseAPI {
 
     public static void main(final String[] commandLineArguments) throws IOException {
 
-        System.out.println("hello :: TextFormatDashboardRunner");
+        System.out.println("begin > DwityUniverseAPI");
 
-        SpringApplication.run(TextFormatDashboardRunner.class, commandLineArguments);
-
-        System.out.println("all done :: TextFormatDashboardRunner");
+        SpringApplication.run(DwityUniverseAPI.class, commandLineArguments);
+        
     }
 
 }
