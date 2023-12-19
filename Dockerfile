@@ -3,6 +3,8 @@
 
 FROM maven:3.8.7-openjdk-18-slim AS MAVEN_BUILD
 
+MAINTAINER Software Shinobi "the.software.shinobi@gmail.com"
+
 ## define key variables
 
 ARG JAR_FILE_NAME dwity-universe-api-1.0.jar
