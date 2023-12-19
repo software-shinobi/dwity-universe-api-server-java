@@ -30,14 +30,14 @@ public class DwityUniverseController {
     @GetMapping("/health")
     public String staticHealthCheck() {
 
-        return "Dwity Universe API System Is Online";
+        return "ONLINE";
 
     }
 
     @GetMapping("/")
     public List<VEvent> listAllEvents() throws IOException {
 
-        List<VEvent> allEvents = this.fetchvEventRemoteICS();
+        List<VEvent> allEvents = this.fetchAllEventsFromCalendar();
 
         return allEvents;
 
@@ -46,34 +46,40 @@ public class DwityUniverseController {
     @GetMapping("/active")
     public List<VEvent> listActiveEvents() throws IOException {
 
-        List<VEvent> allEvents = this.fetchvEventRemoteICS();
+        List<VEvent> allEvents = this.fetchAllEventsFromCalendar();
 
-        List<VEvent> activeEvents = new ArrayList();
+        List<VEvent> onlyActiveEvents = new ArrayList();
 
-        for (final VEvent vEvent : allEvents) {
+        Date rightNowDate = new Date();
 
-            boolean startDateHasPassed = vEvent.getDateStart().getValue().before(new Date());
+        System.out.println("rightNowDate / " + rightNowDate);
 
-            boolean endDateHasNotPassed = vEvent.getDateEnd().getValue().after(new Date());
+        for (final VEvent singleEvent : allEvents) {
+
+            boolean startDateHasPassed = singleEvent.getDateStart().getValue().before(rightNowDate);
+
+            boolean endDateHasNotPassed = singleEvent.getDateEnd().getValue().after(rightNowDate);
 
             boolean isActive = startDateHasPassed && endDateHasNotPassed;
 
             if (isActive) {
 
-                activeEvents.add(vEvent);
+                System.out.println("found active / " + singleEvent);
+
+                onlyActiveEvents.add(singleEvent);
 
             }
 
         }
 
-        return activeEvents;
+        return onlyActiveEvents;
 
     }
 
-    public List<VEvent> fetchvEventRemoteICS() throws IOException {
+    private List<VEvent> fetchAllEventsFromCalendar() throws IOException {
 
-             String randomFileName =
-                "dwity-online-calendar-export." + UUID.randomUUID().toString() + ".ics";
+        String randomFileName
+                = "dwity-online-calendar-export." + UUID.randomUUID().toString() + ".ics";
 
         File temporaryICSFile = new File(randomFileName);
 
@@ -83,8 +89,6 @@ public class DwityUniverseController {
 
 //String url = "https://calendar.google.com/calendar/ical/ht3jlfaac5lfd6263ulfh4tql8%40group.calendar.google.com/public/basic.ics";
         Wget.wGet(randomFileName, url);
-
-        
 
         ICalendar icals = Biweekly.parse(temporaryICSFile).first();
 
