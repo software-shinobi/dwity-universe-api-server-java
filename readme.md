@@ -1,4 +1,13 @@
-ra:~/Desktop/workspace-dwity-universe/dwity-universe-api$ reset;clear;compose build;compose up
+## 
+
+```
+reset;clear;compose build;compose up
+```
+
+##
+
+https://github.com/softwareshinobi/dwity-universe-api
+
 
 http://localhost:8888/dwity-universe/
 
