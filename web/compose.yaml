@@ -1,0 +1,19 @@
+services:
+
+    dwity-universe-web:
+
+        container_name: dwity-universe-web
+
+        image: softwareshinobi/dwity-universe-web
+
+        build: 
+
+            context: .
+
+            dockerfile: Dockerfile
+
+        restart: always
+
+        ports:
+    
+            - "80:80"
